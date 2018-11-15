@@ -1,0 +1,32 @@
+<head>
+    <!-- 生产环境版本，优化了尺寸和速度 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+    <div id="app" class="divvv1">
+        {{ message }}
+    </div>
+
+    <style type="text/css">
+        .divvv1 {
+            color: Red;
+        }
+    </style>
+
+    <script>
+        var atest = new Vue({
+            // el跟id綁定
+            el: '#app2',
+            data: {
+                message: 'Hello Vueaaaaa!'
+            }
+        })
+        var btest = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!'
+            }
+        })
+    </script>
+</body>
