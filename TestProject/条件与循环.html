@@ -1,0 +1,37 @@
+<head>
+    <!-- 生产环境版本，优化了尺寸和速度 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+    <div id="app-3">
+        <a id='testa' v-if='seen'>u can see me now</a>
+    </div>
+
+    <div>
+        <ol id="ol_test">
+            <li v-for='tool in tools'>
+                {{ tool }}
+            </li>
+        </ol>
+    </div>
+
+    <script>
+        var test = new Vue({
+            el: '#testa',
+            data: {
+                seen: true
+            }
+        })
+        var listData = new Vue({
+            el: '#ol_test',
+            data: {
+                tools: [
+                    { text: '大米', num: 12 },
+                    { text: '红豆', num: 5 },
+                    { text: '花生', num: 55 }
+                ]
+            }
+        })
+    </script>
+</body>

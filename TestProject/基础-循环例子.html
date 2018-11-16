@@ -1,0 +1,50 @@
+<html>
+
+<head>
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="div_parent">
+        <input v-model='lesson'>
+        <button v-on:click='addLesson()'>添加课程</button>
+        <ul>
+            <!-- 这里可以使用 todolist.data.lesson_list 吗？目前不知道如何使用 -->
+            <li v-for='item in lesson_list'>
+                {{item}}
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        var todolist = new Vue({
+            el: '#div_parent',
+            data: {
+                lesson_list: [],
+                lesson: ''
+            },
+            methods: {
+                addLesson: function () {
+                    if (this.lesson !== '') {
+                        var exist = false
+                        for (var i = 0; i < this.lesson_list.length; i++) {
+                            var ll = this.lesson_list[i]
+                            // console.log('ll==' + ll + '  lesson==' + this.lesson)
+                            if (this.lesson == ll) {
+                                exist = true
+                                break
+                            }
+                        }
+                        // alert('exist==' + exist)
+                        if (!exist) {
+                            this.lesson_list.push(this.lesson)
+                        }
+                        this.lesson = ''
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
