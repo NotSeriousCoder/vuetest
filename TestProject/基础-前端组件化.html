@@ -1,0 +1,92 @@
+<html>
+
+<head title="基础-前端组件化">
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="div_fruit">
+        <p>请输入要购买的物品</p>
+        <input v-model='good' />
+        <button v-on:click='addGood'>确定</button>
+        <ol>
+            <!-- <li v-for='item in goodList'>{{item}}</li> -->
+            <!-- 组件1 -->
+            <todo-list-item v-for='(item,index) in goodList' v-bind:index='index' v-bind:good='item' @on-delete='deleteItem' />
+            <!-- 组件2 -->
+            <!-- <todo-list v-bind:gglist='goodList' v-bind:index=0 @on-delete='deleteItem'></todo-list> -->
+            <!-- 动态组件 -->
+            <!-- <todo-list2 v-bind:gglist='goodList'></todo-list2> -->
+        </ol>
+    </div>
+    <script>
+        // 组件1
+        Vue.component('TodoListItem', {
+            props: ['good', 'index'],
+            template: "<li @click='handleItemClick'>{{good}}<li>",
+            methods: {
+                handleItemClick: function () {
+                    this.$emit('on-delete', this.index);
+                }
+            }
+        });
+        //组件2(这里的index要怎么传？)
+        Vue.component(
+            'TodoList', {
+                props: ['gglist', 'index'],
+                template: '<ol> <li @click=\'handleItemClick\' v-for=\'(item,index) in gglist\' >{{item}}</li> </ol>',
+                methods: {
+                    handleItemClick: function () {
+                        alert(this.index)
+                        // this.$emit('on-delete', this.index);
+                    }
+                }
+            }
+        );
+
+        var TodoList2 = {
+            props: ['gglist'],
+            template: '<ol> <li v-for=\'item in gglist\'>{{item}}</li> </ol>'
+        };
+
+        var goodHelper = new Vue({
+            el: '#div_fruit',
+            // 动态组件
+            components: {
+                TodoList2: TodoList2
+            },
+            data: {
+                good: '',
+                goodList: []
+            },
+            methods: {
+                addGood: function () {
+                    if (this.good == '') {
+                        alert('不能为空哦')
+                        return
+                    }
+                    var add = true;
+                    for (var i = 0; i < this.goodList.length; i++) {
+                        var temp = this.goodList[i]
+                        if (temp == this.good) {
+                            add = false;
+                            alert(temp + '已经有了，换一个吧')
+                            break
+                        }
+                    }
+                    if (add) {
+                        // alert(this.good)
+                        this.goodList.push(this.good)
+                    }
+                    this.good = ''
+                },
+                deleteItem: function (index) {
+                    this.goodList.splice(index, 1)
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>

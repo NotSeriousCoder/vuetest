@@ -16,6 +16,17 @@
         </ul>
     </div>
 
+    <p>========================复习====================</p>
+    <div id='div_review'>
+        <input v-model='fruit'>
+        <button v-on:click='addFruit'>{{btText}}</button>
+        <ol>
+            <li v-for='ff in fruits'>
+                {{ff}}
+            </li>
+        </ol>
+    </div>
+
     <script>
         var todolist = new Vue({
             el: '#div_parent',
@@ -40,6 +51,31 @@
                             this.lesson_list.push(this.lesson)
                         }
                         this.lesson = ''
+                    }
+                }
+            }
+        });
+
+        var fruitHelper = new Vue({
+            el: '#div_review',
+            data: {
+                btText: '请输入想吃的水果',
+                fruit: '',
+                fruits: []
+            },
+            methods: {
+                addFruit: function () {
+                    var add = true
+                    for (var i = 0; i < this.fruits.length; i++) {
+                        var temp = this.fruits[i]
+                        if (temp == this.fruit) {
+                            alert(this.fruit + '已经有了，换一个吧')
+                            add = false
+                            break
+                        }
+                    }
+                    if (add) {
+                        this.fruits.push(this.fruit)
                     }
                 }
             }

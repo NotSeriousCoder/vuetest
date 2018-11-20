@@ -14,6 +14,16 @@
                 鼠标悬停几秒钟查看此处动态绑定的提示信息！
             </span>
         </div>
+
+        <p>=================复习===================</p>
+
+    </div>
+
+    <div>
+        <p id="p_review1"> {{ contentt }} </p>
+        <p class="p_review2" v-on:click='reviewOnClick'>fdagrsg</p>
+        <h3>{{ content2 }}</h3>
+        <h3>{{ content2 }}</h3>
     </div>
 
     <!-- <style type="text/css">
@@ -42,5 +52,55 @@
         //         message: '页面加载于 ' + new Date().toLocaleString()
         //     }
         // })
+        var review1 = new Vue({
+            el: '#p_review1',
+            data: {
+                contentt: '复习11111'
+            }
+        })
+
+        var review2 = new Vue({
+            el: '.p_review2',
+            methods: {
+                reviewOnClick: function () {
+                    alert('hehe')
+                }
+            }
+        })
+
+        var review3 = new Vue({
+            el: 'h3',
+            data: {
+                content2: '浪里个浪'
+            }
+        })
+
+        var exemple = new Vue({
+            //指定要接管的元素
+            //可以使用id指定
+            // el:'#id',
+            //可以使用class指定，但是多个同名class只会接管第一个，就是说其它同名class都不会生效
+            //el:'.class',
+            //可以使用元素名称指定，但是也是只会接管第一个指定的元素，其他都不会生效
+            // el:'p',
+
+            //数据，使用json格式
+            data: {
+                xxx1: '',
+                xxx2: ''
+            },
+
+            //函数
+            methods: {
+                fun1: function () {
+                    // do anything what u want
+                },
+                fun2: function () {
+                    // do anything what u want
+                }
+            }
+
+        })
+
     </script>
 </body>
