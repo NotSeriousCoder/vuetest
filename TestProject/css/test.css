@@ -1,0 +1,20 @@
+/* 按标签指定 */
+span {
+    text-indent: 2em;
+    color: orange;
+    font-size: 15pt;
+}
+
+/* 按id指定 */
+#div_test_outer_style {
+    text-indent: 2em;
+    color: pink;
+    font-size: 50px;
+}
+
+/*  按class指定  */
+.blue_big {
+    text-indent: 2em;
+    color: blue;
+    font-size: 100px;
+}

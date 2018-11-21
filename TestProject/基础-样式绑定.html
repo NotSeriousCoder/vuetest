@@ -1,0 +1,78 @@
+<html>
+
+<head title="基础-样式绑定">
+    <script src="../../vue.js"></script>
+    <link href="./css/test.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        /* 按标签指定 */
+        a {
+            text-indent: 2em;
+            color: red;
+            font-size: 15pt;
+        }
+
+        /* 按id指定 */
+        #div_test_inner_style {
+            text-indent: 2em;
+            color: yellow;
+            font-size: 50px;
+        }
+
+        /*  按class指定  */
+        .green_big {
+            text-indent: 2em;
+            color: green;
+            font-size: 100px;
+        }
+    </style>
+</head>
+
+<h3>复习--CSS的引入方式</h3>
+<h2>1.外部样式表</h2>
+<p>外部样式表都是在head标签内使用link标签来引用的</p>
+</br>
+<span>外部样式表-按标签指定</span>
+</br>
+<p id="div_test_outer_style">外部样式表-按id指定</p>
+<p class="blue_big">外部样式表-按class指定</p>
+
+</br></br></br>
+<h2>2.内部样式表</h2>
+<p>CSS代码放在style标签对内，并且style标签对放在head标签对内。</p>
+</br>
+<a>内部样式表-按标签指定</a>
+<p id="div_test_inner_style">内部样式表-按id指定</p>
+<p class="green_big">内部样式表-按class指定</p>
+<p id="div_test_inner_style" class="green_big">内部样式表-按id指定+按class指定</p>
+<p>结论：样式指定方式优先级===按id指定>按class指定>按标签指定</p>
+</br></br></br>
+<h2>3.内联样式表</h2>
+<p style="color:red;font-size:20pt;">内联样式是这个样子的~~~</p>
+
+</br></br></br></br></br></br>
+<h3>VUE部分--样式绑定</h3>
+
+<div id="div_style">
+    <a @click='changeState()' :id='{div_test_inner_style : isActive}'>通过id绑定，貌似并不支持</a></br>
+    <a @click='changeState()' :class='{green_big : isActive}'>通过class绑定</a>
+    <p @click='changeState()' :class='{green_big : isActive, blue_big : !isActive}'>绑定多个class</p>
+    <p @click='changeState()' :class='["blue_big", {green_big : isActive}]'>数组方式绑定</p>
+    <!--  -->
+</div>
+
+<script>
+    var app = new Vue({
+        el: '#div_style',
+        data: {
+            isActive: false,
+        },
+        methods: {
+            changeState: function () {
+                this.isActive = !this.isActive
+            }
+        }
+    })
+</script>
+
+
+</html>

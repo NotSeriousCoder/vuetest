@@ -1,0 +1,45 @@
+<html>
+
+<head title="条件渲染">
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="div_parent">
+        <p>大于10，则结果显示</p>
+        <input v-model='value1' /> <span> + </span> <input v-model='value2' />
+        <!-- if：当false的时候，直接不渲染 -->
+        <p v-if='seen'>{{result}}</p>
+        <p v-else-if='result == 10'>就差一点了，加油！！</p>
+        <!-- 对应if来使用 -->
+        <p v-else>结果太小，不予展示</p>
+        <!-- show：当false的时候，渲染，但是设置了display='none' -->
+        <p v-show='result > 10'>{{result}}</p>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#div_parent',
+            data: {
+                value1: 0,
+                value2: 0
+            },
+            computed: {
+                result: function () {
+                    return this.value1 * 1 + this.value2 * 1
+                },
+                seen: function () {
+                    if (this.result > 10) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>

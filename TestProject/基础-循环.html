@@ -1,0 +1,115 @@
+<html>
+
+<head title="基础-循环">
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <div id="div_parent">
+        <p>请输入数据内容，格式：[{id:xxx,value:xxx},...]</p>
+        <!-- <textarea v-model='tempItem' placeholder='请输入数据内容' style="width:700px;height:300px;"> </textarea> -->
+        id <input v-model='id' />
+        </br>
+        value <input v-model='value' />
+        </br>
+        position <input v-model='position' />
+        </br>
+        <button @click='add()'>添加一条数据到头部</button>
+        </br>
+        <button @click='append()'>添加一条数据到尾部</button>
+        </br>
+        <button @click='put()'>添加一条数据到任意位置</button>
+        </br>
+        </br>
+        <p>结果</p>
+        <div v-for='item in list' key='item.id'>
+            <p>{{item.id}} === {{item.value}}</p>
+            <!-- <p>{{item}}</p> -->
+        </div>
+
+        <p>使用template</p>
+        <!-- 使用template，实际渲染的时候template并不会被渲染出来 -->
+        <template v-for='item in list' key='item.id'>
+            <h5>{{item.id}}</h5>
+            <p>item</p>
+        </template>
+    </div>
+
+    <div id="div_person">
+        <p>=====================================</p>
+        <p>遍历对象</p>
+        姓名 <input v-model='person.name' /></br>
+        年龄 <input v-model='person.age' /></br>
+        性别 <input v-model='person.gender' /></br>
+        住址 <input v-model='person.address' /></br>
+        职业 <input v-model='person.job' /></br>
+        <button @click='append()'>新增</button>
+
+        <p>=====================================</p>
+        <div v-for='item in people'>
+            <span v-for='(prop,index) in item'>
+                {{prop}}   
+            </span>
+            <!-- {{item}} -->
+        </div>
+    </div>
+
+    <script>
+
+        var app = new Vue({
+            el: '#div_parent',
+            data: {
+                id: '',
+                value: '',
+                position: 0,
+                list: []
+                // { id: 'xxx', value: 'xxx' }
+            },
+            methods: {
+                getItem: function () {
+                    var item = {
+                        id: '',
+                        value: ''
+                    };
+                    item.id = this.id;
+                    item.value = this.value;
+                    this.id = '';
+                    this.value = '';
+                    return item;
+                },
+                add: function () {
+                    this.list.unshift(this.getItem())
+                },
+                append: function () {
+                    this.list.push(this.getItem())
+                },
+                put: function () {
+                    this.list.splice(this.position, 0, this.getItem())
+                },
+            }
+        })
+
+        var person = new Vue({
+            el: '#div_person',
+            data: {
+                person: {
+                    name: '',
+                    age: '',
+                    gender: '',
+                    address: '',
+                    job: ''
+                },
+                people: [
+                ]
+            },
+            methods: {
+                append: function () {
+                    this.people.splice(this.people.length, 0, this.person)
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>

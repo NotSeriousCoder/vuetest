@@ -23,9 +23,22 @@
             },
 
             // 方式一：使用computed（有缓存，相关值不改变时，不会引发重新计算）
+            // computed: {
+            //     fullName: function () {
+            //         return this.firstName + " " + this.lastName;
+            //     }
+            // },
+            // 方式一（加入get set）
             computed: {
-                fullName: function () {
-                    return this.firstName + " " + this.lastName;
+                fullName: {
+                    get: function () {
+                        return this.firstName + " " + this.lastName
+                    },
+                    set: function (fnValue) {
+                        var nameArr = fnValue.split(' ');
+                        this.firstName = nameArr[0];
+                        this.lastName = nameArr[1];
+                    }
                 }
             },
 
