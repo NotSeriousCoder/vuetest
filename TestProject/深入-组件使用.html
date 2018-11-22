@@ -1,0 +1,232 @@
+<html>
+
+<head title="深入-组件使用">
+    <script src="../../vue.js"></script>
+</head>
+
+<body>
+    <h2>一、使用is解决一些bug</h2>
+    <p>比如，table下必须放tr，会导致自定义组件失效，用is指向自定义组件</p>
+
+    <div id="parent">
+        <table>
+            <tr is='table-test'></tr>
+            <tr is='table-test'></tr>
+            <tr is='table-test'></tr>
+        </table>
+    </div>
+
+    <div id="div_second">
+
+        <h2>
+            二、子组件的数据存放
+        </h2>
+        <p>
+            子组件的数据data必须是一个function
+        </p>
+
+        <table>
+            <tr is='table-test'></tr>
+            <tr is='table-test'></tr>
+            <tr is='table-test'></tr>
+        </table>
+    </div>
+
+    <div ref='third' id="div_third">
+        <h2>
+            通过ref获取Dom节点
+        </h2>
+        <div @click='handleClick()'>
+            <a href="#">点击此处，新增节点</a>
+        </div>
+    </div>
+
+    <div id="div_fourth">
+        <h2>
+            通过ref获取子组件节点
+        </h2>
+        <counter @change='calculate' ref='one'></counter>
+        <counter @change='calculate' ref='two'></counter>
+        <p>总和{{total}}</p>
+    </div>
+
+    <h3>
+        总结：</br>
+        在普通标签上面使用ref，获得的是标签对应的Dom元素</br>
+        在自定义组件标签上使用ref，获得的是子组件的引用
+    </h3>
+
+    <div id="div_fifth">
+        <h3>
+            參數校验+子组件向父组件传值
+        </h3>
+        <!-- 不加:的传值是非props传值，如果没将它接收，会显示在标签中 -->
+        <!-- 通过.native可以触发自定义组件的原生事件，不加.native的情况下，触发的是自定义事件 -->
+        <count-adder text='随机增加' @change="calculate" @click.native="test"></count-adder>
+        <p>{{total}}</p>
+    </div>
+
+    <div id="div_observer">
+        <h3>BUS/总线机制/观察者模式 实现非父子组件间数据传递</h3>
+
+        <chat-view :name='"小明"' @on-message-received='aaaa'></chat-view>
+        <chat-view @on-message-received='aaaa'></chat-view>
+
+        <div ref='chatContent'>
+
+        </div>
+    </div>
+
+
+
+    <script>
+        Vue.prototype.bus = new Vue()
+
+        Vue.component('TableTest', {
+            data: function () {
+                return {
+                    content: 'this is content'
+                }
+            },
+            template: '<tr><td>{{content}}</td><td>{{content}}</td><td>{{content}}</td></tr>'
+        });
+
+        Vue.component('counter', {
+            data: function () {
+                return {
+                    count: 0
+                }
+            },
+            template: '<div @click="handlerItemClick()">{{count}}</div>',
+            methods: {
+                handlerItemClick: function () {
+                    this.count++;
+                    this.$emit('change', this.count)
+                }
+            }
+        })
+
+        Vue.component('ChatView', {
+            props: {
+                name: {
+                    default: 'admin',
+                    type: String
+                }
+            },
+            data: function () {
+                return {
+                    userName: this.name,
+                    message: ''
+                }
+            },
+            template: '<div><p>{{userName}}</p> <textarea v-model="this.message"> </textarea> </br> <button @click="send">发送</button> </div>',
+            methods: {
+                send: function () {
+                    // alert(message)
+                    this.bus.$emit('onMessageSend', message, this.userName)
+                }
+            },
+            mounted: function () {
+                var this_ = this
+                this_.bus.$on('onMessageSend', function (msg, user) {
+                    // console.log('i\'m ' + this_.userName)
+                    // console.log(msg + ' by ' + user)
+                    // console.log(this_.$refs.chatContent)
+                    if (this_.userName != user) {
+                        this_.$emit('on-message-received', msg, user)
+                    }
+                })
+            }
+        })
+
+        var adder = {
+            props: {
+                text: {
+                    type: String,
+                    default: '增加',
+                    required: false,
+                    validator: function (value) {
+                        return value != 'shit'
+                    }
+                }
+            },
+            template: '<button @click="addCount">{{text}}</button>',
+            methods: {
+                addCount: function () {
+                    this.$emit('change', Math.floor(Math.random() * 10))
+                }
+            }
+        }
+
+        var app = new Vue({
+            el: '#parent',
+            date: {
+                temp: 123
+            }
+        })
+
+        var app2 = new Vue({
+            el: '#div_second',
+        })
+
+        var app3 = new Vue({
+            el: '#div_third',
+            methods: {
+                handleClick: function () {
+                    var th = this.$refs.third
+
+                    var p = document.createElement("p")
+                    var node = document.createTextNode("这个是动态新增的节点")
+                    p.appendChild(node)
+
+                    th.appendChild(p)
+                }
+            }
+        })
+
+        var app4 = new Vue({
+            el: '#div_fourth',
+            data: {
+                total: 0
+            },
+            methods: {
+                calculate: function (count) {
+                    this.total = this.$refs.one.count + this.$refs.two.count
+                }
+            }
+        })
+
+        var app5 = new Vue({
+            el: '#div_fifth',
+            components: {
+                // CountAdder是别名
+                CountAdder: adder
+            },
+            data: {
+                total: 10
+            },
+            methods: {
+                calculate: function (addcount) {
+                    this.total += addcount * 1
+                },
+                test: function () {
+                    alert('haha')
+                }
+            }
+        })
+
+        var subscrib = new Vue({
+            el: "#div_observer",
+            methods: {
+                aaaa: function () {
+                    var p = document.createElement('p')
+                    var content = document.createTextNode('ssssssss')
+                    p.append(content)
+                    this.$refs.chatContent.appendChild(p)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
